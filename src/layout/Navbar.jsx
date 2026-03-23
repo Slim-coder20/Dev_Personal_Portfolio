@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from "../components/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import "../index.css";
 
@@ -16,8 +16,8 @@ const navLinks = [
   },
 
   {
-    href: "#experience",
-    label: "Expérience",
+    href: "#diplome",
+    label: "Diplômes",
   },
 
   {
@@ -27,10 +27,20 @@ const navLinks = [
 ];
 
 export const Navbar = () => {
-
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // Création d'un nouveau state pour le scroll //
+  const [isScrolled, setIsScrolled] = useState(false);
+  // Ce useEffect va écouter le scroll et mettre à jour le state isScrolled //
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    return () => window.addEventListener("scroll", handleScroll);
+  }, []);
   return (
-    <header className="fixed top-0 left-0 right-0 bg-transparent py-5">
+    <header
+      className={`fixed top-0 left-0 right-0  transition-all duration-500 ${isScrolled ? "glass-strong py-3" : "bg-transparent py-5"} z-50`}
+    >
       <nav className="container mx-auto px-6 flex items-center justify-between">
         <a
           href="#"
@@ -45,7 +55,7 @@ export const Navbar = () => {
               <a
                 href={link.href}
                 key={index}
-                className="px-4 py-2 text-sm text-muted-foreground hover:text-primary rounded-full hover:bg-surface"
+                className="px-4 py-2 text-sm text-muted-foreground hover:text-primary rounded-full hover:bg-surface cursor-pointer"
               >
                 {link.label}
               </a>
@@ -83,4 +93,4 @@ export const Navbar = () => {
       )}
     </header>
   );
-}
+};;
