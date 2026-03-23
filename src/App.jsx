@@ -2,9 +2,9 @@ import "./index.css"
 import { Navbar } from "./layout/Navbar"
 import { Hero } from "./section/Hero"
 import { About } from "./section/About"
-import { Experience } from "./section/Experience"
 import { Projects } from "./section/Projects"
 import { Contact } from "./section/Contact"
+import { Diplome } from "./section/Diplome"
 function App() {
   
 
@@ -14,7 +14,7 @@ function App() {
       <main>
         <Hero/>
         <About/>
-        <Experience/>
+        <Diplome/>
         <Projects/>
         <Contact/>
       </main>

@@ -107,11 +107,14 @@ export const Hero = () => {
             <div className="flex items-center gap-4 animate-fade-in animation-delay-400">
               <span className="text-sm text-muted-foreground">Follow me: </span>
               {[
-                { icon: Github, href: "#" },
-                { icon: Linkedin, href: "#" },
-                { icon: Twitter, href: "#" },
+                { icon: Github, href: "https://github.com/Slim-coder20" },
+                {
+                  icon: Linkedin,
+                  href: "https://www.linkedin.com/in/slim-abida-50161a35b/",
+                },
               ].map((social, idx) => (
                 <a
+                  target="_blank"
                   key={idx}
                   href={social.href}
                   className="p-2 rounded-full glass hover:bg-primary/10 hover:text-primary transition-all duration-300"
@@ -160,7 +163,7 @@ export const Hero = () => {
         {/* Skills Section */}
         <div className="mt-20 animate-fade-in animation-delay-600">
           <p className="text-sm text-muted-foreground mb-6 text-center">
-              Mes Technos
+            Mes Technos
           </p>
           <div className="relative overflow-hidden">
             <div

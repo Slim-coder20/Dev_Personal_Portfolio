@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Experience = () => {
+export const Diplome = () => {
   return (
     <section></section>
   )
