@@ -1,5 +1,8 @@
 import React from 'react'
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Button } from "../components/Button";
+import { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 const contactInfo = [
   {
@@ -23,6 +26,61 @@ const contactInfo = [
 ];
 
 export const Contact = () => {
+  // Création de state pour le formData //
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({
+    type: null,
+    message: "",
+  });
+
+  // Fonction de soumission du formulaire //
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setSubmitStatus({ type: null, message: "" });
+    try {
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error("Erreur lors de l'envoie du message");
+      }
+      const result = await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        publicKey,
+      );
+      console.log(result);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setIsLoading(false);
+      setSubmitStatus({
+        type: "success",
+        message: "Message envoyé avec succès",
+      });
+    } catch (err) {
+      setSubmitStatus({
+        type: "error",
+        message: "Erreur lors de l'envoie du message : " + err.message,
+      });
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-32 relative overflow-hidden">
       {/* Background  */}
@@ -51,7 +109,7 @@ export const Contact = () => {
         </div>
         <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
           <div className="glass p-8 rounded-3xl border border-primary/30 animate-fade-in animation-delay-300">
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor="name"
@@ -61,8 +119,14 @@ export const Contact = () => {
                 </label>
                 <input
                   type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   id="name"
                   className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer"
+                  placeholder="votre nom..."
                 />
               </div>
               <div>
@@ -74,8 +138,33 @@ export const Contact = () => {
                 </label>
                 <input
                   type="email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  required
                   id="email"
                   className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer"
+                  placeholder="contact@exemple.com"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="subject"
+                  className="block text-sm font-medium mb-2"
+                >
+                  Sujet
+                </label>
+                <input
+                  type="text"
+                  value={formData.subject}
+                  onChange={(e) =>
+                    setFormData({ ...formData, subject: e.target.value })
+                  }
+                  required
+                  id="subject"
+                  className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer"
+                  placeholder="Votre sujet..."
                 />
               </div>
               <div>
@@ -87,10 +176,20 @@ export const Contact = () => {
                 </label>
                 <textarea
                   id="message"
+                  value={formData.message}
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
                   rows={5}
                   className="w-full px-4 py-3 bg-surface rounded-xl border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all cursor-pointer resize-none"
+                  placeholder="Bonjour..."
                 />
               </div>
+
+              <Button className="w-full" type="submit" size="lg">
+                Envoyer
+                <Send />
+              </Button>
             </form>
           </div>
 
@@ -125,4 +224,4 @@ export const Contact = () => {
       </div>
     </section>
   );
-}
+};
