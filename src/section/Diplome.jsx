@@ -2,7 +2,7 @@ import React from 'react'
 
 const expriences = [
   {
-    period: "2024 - 2026",
+    period: "2024 - 2025",
     school: "Studi",
     diplome: "RNCP Bac+2 DWWM",
   },
@@ -35,10 +35,11 @@ export const Diplome = () => {
             </span>
           </h2>
           <p className="text-muted-foreground animate-fade-in animation-delay-200">
-            Développeur Web & Web Mobile diplômé – Studi. Spécialisé en
-            architectures modernes React/Node.js, j'allie théorie académique et
-            réalisation de projets concrets pour concevoir des produits
-            numériques de haute qualité.
+            Diplômé de chez Studi, j'ai consolidé mon expertise technique à
+            travers une formation rigoureuse axée sur les réalités du marché. Ce
+            cursus m'a permis de maîtriser l'intégralité du cycle de
+            développement, de la conception d'architectures Full-Stack à
+            l'optimisation de l'expérience utilisateur.
           </p>
         </div>
         {/* Timeline */}
