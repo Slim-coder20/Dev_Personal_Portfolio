@@ -30,12 +30,18 @@ export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // Création d'un nouveau state pour le scroll //
   const [isScrolled, setIsScrolled] = useState(false);
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   // Ce useEffect va écouter le scroll et mettre à jour le state isScrolled //
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    return () => window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   return (
     <header
@@ -64,7 +70,9 @@ export const Navbar = () => {
         </div>
         {/* CTA Button */}
         <div className="hidden md:block">
-          <Button size="sm">Contacter Moi</Button>
+          <Button size="sm" onClick={() => scrollToSection("contact")}>
+            Contacter Moi
+          </Button>
         </div>
         {/*   Mobile menu Button */}
         <button
@@ -88,10 +96,17 @@ export const Navbar = () => {
                 {link.label}
               </a>
             ))}
-            <Button onClick={() => setIsMobileMenuOpen(false)}>Contacter Moi</Button>
+            <Button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                scrollToSection("contact");
+              }}
+            >
+              Contacter Moi
+            </Button>
           </div>
         </div>
       )}
     </header>
   );
-};;
+};

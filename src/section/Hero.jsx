@@ -29,6 +29,12 @@ const skills = [
 ];
 
 export const Hero = () => {
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Bg */}
@@ -94,7 +100,7 @@ export const Hero = () => {
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-4 animate-fade-in animation-delay-300">
-              <Button size="lg">
+              <Button size="lg" onClick={() => scrollToSection("contact")}>
                 Contacter moi <ArrowRight className="w-5 h-5" />
               </Button>
               <AnimatedBorderButton>
