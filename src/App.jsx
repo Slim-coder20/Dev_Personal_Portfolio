@@ -5,6 +5,7 @@ import { About } from "./section/About"
 import { Projects } from "./section/Projects"
 import { Contact } from "./section/Contact"
 import { Diplome } from "./section/Diplome"
+import { Footer } from "./layout/Footer"
 function App() {
   
 
@@ -18,6 +19,7 @@ function App() {
         <Projects/>
         <Contact/>
       </main>
+      <Footer/>
    </div>
   )
 }
