@@ -104,7 +104,11 @@ export const Hero = () => {
               <Button size="lg" onClick={() => scrollToSection("contact")}>
                 Contacter moi <ArrowRight className="w-5 h-5" />
               </Button>
-              <AnimatedBorderButton>
+              <AnimatedBorderButton
+                as="a"
+                href="/CV_Slim_Abida.pdf"
+                download="CV_Slim_Abida.pdf"  
+              >
                 <Download className="w-5 h-5" />
                 Télécharger CV
               </AnimatedBorderButton>
