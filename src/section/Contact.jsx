@@ -44,36 +44,61 @@ export const Contact = () => {
     e.preventDefault();
     setIsLoading(true);
     setSubmitStatus({ type: null, message: "" });
+    
     try {
       const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
       const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
       const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+      const autoReplyTemplateId = import.meta.env
+        .VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID;
 
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error("Erreur lors de l'envoie du message");
+      // Vérification des variables d'environnement
+      if (!serviceId || !templateId || !publicKey || !autoReplyTemplateId) {
+        throw new Error(
+          "Configuration EmailJS incomplète dans le fichier .env",
+        );
       }
-      const result = await emailjs.send(
+
+      // 1. Envoi de la notification à TOI (Admin)
+      await emailjs.send(
         serviceId,
         templateId,
         {
-          name: formData.name,
-          email: formData.email,
+          user_name: formData.name,
+          user_email: formData.email,
           subject: formData.subject,
           message: formData.message,
         },
         publicKey,
       );
-      console.log(result);
+
+      // 2. Accusé de réception au visiteur (template séparé)
+      await emailjs.send(
+        serviceId,
+        autoReplyTemplateId,
+        {
+          user_name: formData.name,
+          user_email: formData.email,
+          to_email: formData.email,
+          email: formData.email,
+          subject: formData.subject,
+        },
+        publicKey,
+      );
+
       setFormData({ name: "", email: "", subject: "", message: "" });
-      setIsLoading(false);
       setSubmitStatus({
         type: "success",
-        message: "Message envoyé avec succès",
+        message: "Message envoyé avec succès !",
       });
+      // Ajout du timer pour effacer le message après 3 seconde
+      setTimeout(() => {
+        setSubmitStatus({ type: null, message: "" });
+      }, 3000);
     } catch (err) {
       setSubmitStatus({
         type: "error",
-        message: "Erreur lors de l'envoie du message : " + err.message,
+        message: "Erreur lors de l'envoi : " + err.message,
       });
       console.error(err);
     } finally {
@@ -185,9 +210,25 @@ export const Contact = () => {
                   placeholder="Bonjour..."
                 />
               </div>
+              {submitStatus.message && (
+                <div
+                  className={`p-4 rounded-xl text-sm border animate-in fade-in duration-300 ${
+                    submitStatus.type === "success"
+                      ? "bg-primary/10 text-primary border-primary/20"
+                      : "bg-red-500/10 text-red-500 border-red-500/20"
+                  }`}
+                >
+                  {submitStatus.message}
+                </div>
+              )}
 
-              <Button className="w-full" type="submit" size="lg">
-                Envoyer
+              <Button
+                className="w-full"
+                type="submit"
+                size="lg"
+                disabled={isLoading}
+              >
+                {isLoading ? "Envoi en cours..." : "Envoyer"}
                 <Send />
               </Button>
             </form>
