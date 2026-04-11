@@ -55,6 +55,38 @@ const projects = [
     link: "https://www.slimabida.fr/",
     github: "https://github.com/Slim-coder20/my-web-site.git",
   },
+  {
+    title: "Tunzik Production - Association de spectacle vivant",
+    description:
+      "Site web de Tunzik Production, association d'aide au spectacle vivant basée à Paris depuis 2017. La plateforme présente les artistes du label, leur discographie, et permet aux visiteurs de devenir adhérents ou de contacter l'association",
+    image: "/projects/tunzikProd.png",
+    tags: [
+      "React 19",
+      "Tailwindcss",
+      "React Context API",
+      "MongoDB",
+      "Vercel",
+      "Render",
+    ],
+    link: "https://tunzik-prod.vercel.app/",
+    github: "https://github.com/Slim-coder20/tunzikProd.git",
+  },
+  {
+    title: "Chatbot AI - Une mini application de chat IA",
+    description:
+      "Une application de chatbot interactif utilisant l'API OpenAI GPT-4o pour créer une expérience de conversation fluide et intuitive.",
+    image: "/projects/chatbot.png",
+    tags: [
+      "HTML",
+      "CSS",
+      "OPENAI API",
+      "JavaScript",
+      "Vercel"
+      
+    ],
+    link: "https://chatbot-ia-topaz.vercel.app/",
+    github: "https://github.com/Slim-coder20/chatbot_IA-.git",
+  },
 ];
 export const Projects = () => {
   return (
