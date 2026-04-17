@@ -1,16 +1,90 @@
-# React + Vite
+# Dev Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portfolio personnel développé avec **React + Vite** et stylisé avec **Tailwind CSS**.  
+Il inclut notamment une section Contact avec envoi d’emails via **EmailJS** (notification + réponse automatique).
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React** (front)
+- **Vite** (dev server / build)
+- **Tailwind CSS**
+- **EmailJS** (formulaire de contact)
+- **lucide-react** (icônes)
 
-## React Compiler
+## Prérequis
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Node.js** (LTS recommandé)
+- **npm**
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+```
+
+## Développement
+
+```bash
+npm run dev
+```
+
+Puis ouvre l’URL indiquée dans le terminal (généralement `http://localhost:5173`).
+
+## Build / Preview
+
+```bash
+# build de production
+npm run build
+
+# prévisualisation du build
+npm run preview
+```
+
+## Lint
+
+```bash
+npm run lint
+```
+
+## Configuration EmailJS (formulaire de contact)
+
+La section `Contact` lit ces variables d’environnement :
+
+- `VITE_EMAILJS_SERVICE_ID`
+- `VITE_EMAILJS_TEMPLATE_ID` (template de notification admin)
+- `VITE_EMAILJS_PUBLIC_KEY`
+- `VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID` (template de réponse automatique)
+
+Crée un fichier `.env` à la racine du projet :
+
+```bash
+VITE_EMAILJS_SERVICE_ID=xxxx
+VITE_EMAILJS_TEMPLATE_ID=xxxx
+VITE_EMAILJS_PUBLIC_KEY=xxxx
+VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID=xxxx
+```
+
+Notes :
+- Les variables **doivent** commencer par `VITE_` pour être exposées côté client avec Vite.
+- Ne commit pas ton `.env` (il doit rester local).
+
+## Structure (aperçu)
+
+- `src/App.jsx` : point d’entrée de l’app
+- `src/layout/` : layout (ex. `Navbar`, `Footer`)
+- `src/section/` : sections (Hero, About, Contact, etc.)
+- `src/components/` : composants réutilisables
+
+## Déploiement
+
+Ce projet est un site statique (SPA). Tu peux le déployer sur Vercel, Netlify, GitHub Pages, etc.
+
+1. Build :
+
+```bash
+npm run build
+```
+
+2. Déploie le dossier `dist/`.
+
+3. Configure tes variables EmailJS dans l’UI du provider (variables d’environnement du projet) si nécessaire.
