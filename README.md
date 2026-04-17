@@ -75,6 +75,37 @@ Notes :
 - `src/section/` : sections (Hero, About, Contact, etc.)
 - `src/components/` : composants réutilisables
 
+## Plan d’architecture
+
+### Vue d’ensemble (flux)
+
+- **Entrée** : `index.html` → `src/main.jsx` → `src/App.jsx`
+- **Composition** : `App` assemble le layout (`src/layout/`) et les sections (`src/section/`)
+- **UI réutilisable** : composants transverses dans `src/components/`
+- **Contact** : `src/section/Contact.jsx` envoie les emails via EmailJS et lit les variables `VITE_EMAILJS_*`
+
+### Arborescence (simplifiée)
+
+```text
+.
+├── index.html
+├── package.json
+└── src/
+    ├── main.jsx
+    ├── App.jsx
+    ├── assets/
+    ├── components/
+    │   ├── Button.jsx
+    │   └── AnimatedBorderButton.jsx
+    ├── layout/
+    │   ├── Navbar.jsx
+    │   └── Footer.jsx
+    └── section/
+        ├── Hero.jsx
+        ├── About.jsx
+        └── Contact.jsx
+```
+
 ## Déploiement
 
 Ce projet est un site statique (SPA). Tu peux le déployer sur Vercel, Netlify, GitHub Pages, etc.
