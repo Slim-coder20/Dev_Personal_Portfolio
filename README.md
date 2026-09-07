@@ -11,6 +11,7 @@ Il inclut notamment une section Contact avec envoi d’emails via **EmailJS** (n
 - **EmailJS** (formulaire de contact)
 - **lucide-react** (icônes)
 - **MongoDB** (données des projets, via une fonction serverless Vercel)
+- **react-router-dom** (routing, y compris l'espace `/admin`)
 
 ## Prérequis
 
@@ -87,6 +88,32 @@ node --env-file=.env scripts/seed.mjs
 ```
 
 - En local, `vite dev` seul ne sert pas les fonctions `api/`. Utiliser `vercel dev` (CLI Vercel) pour tester `/api/projects` en conditions réelles, ou se fier au déploiement (preview/production) sur Vercel.
+
+## Espace admin (`/admin`)
+
+Un espace `/admin` protégé par mot de passe est en cours de mise en place (phase 1 : authentification + routing ; la gestion du contenu viendra ensuite).
+
+Variables à ajouter dans `.env` (jamais préfixées `VITE_`, lues uniquement côté serveur) :
+
+```bash
+JWT_SECRET=une-chaine-aleatoire-longue
+ADMIN_PASSWORD_HASH=$2b$12$...
+```
+
+- Générer `JWT_SECRET` (une seule fois, à garder identique entre local et prod) :
+
+```bash
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+```
+
+- Générer `ADMIN_PASSWORD_HASH` à partir du mot de passe de ton choix (jamais stocké en clair) :
+
+```bash
+node scripts/hash-password.mjs "TonMotDePasse"
+```
+
+- Ajouter les deux variables dans Vercel → Project Settings → Environment Variables (Production **et** Preview si besoin) avant de déployer.
+- Routes : `/admin/login` (formulaire), `/admin` (dashboard, redirige vers `/admin/login` si non connecté). API : `POST /api/admin/login`, `POST /api/admin/logout`, `GET /api/admin/me`.
 
 ## Structure (aperçu)
 
