@@ -1,26 +1,16 @@
 import "./index.css"
-import { Navbar } from "./layout/Navbar"
-import { Hero } from "./section/Hero"
-import { About } from "./section/About"
-import { Projects } from "./section/Projects"
-import { Contact } from "./section/Contact"
-import { Diplome } from "./section/Diplome"
-import { Footer } from "./layout/Footer"
-function App() {
-  
+import { Routes, Route } from "react-router-dom"
+import { HomePage } from "./pages/HomePage"
+import { AdminLogin } from "./admin/AdminLogin"
+import { AdminDashboard } from "./admin/AdminDashboard"
 
+function App() {
   return (
-   <div className="min-h-screen overflow-x-hidden">
-      <Navbar />
-      <main>
-        <Hero/>
-        <About/>
-        <Diplome/>
-        <Projects/>
-        <Contact/>
-      </main>
-      <Footer/>
-   </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+    </Routes>
   )
 }
 
