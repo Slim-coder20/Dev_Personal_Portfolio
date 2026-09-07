@@ -10,6 +10,8 @@ Il inclut notamment une section Contact avec envoi d’emails via **EmailJS** (n
 - **Tailwind CSS**
 - **EmailJS** (formulaire de contact)
 - **lucide-react** (icônes)
+- **MongoDB** (données des projets, via une fonction serverless Vercel)
+- **react-router-dom** (routing, y compris l'espace `/admin`)
 
 ## Prérequis
 
@@ -68,12 +70,59 @@ Notes :
 - Les variables **doivent** commencer par `VITE_` pour être exposées côté client avec Vite.
 - Ne commit pas ton `.env` (il doit rester local).
 
+## Configuration MongoDB (projets)
+
+La section `Projects` charge ses données via la fonction serverless `api/projects.js`, qui lit la collection `projects` d'une base MongoDB. Variable à ajouter dans `.env` :
+
+```bash
+MONGO_URI=mongodb+srv://...
+```
+
+Notes :
+- **Ne pas préfixer par `VITE_`** : cette variable est lue uniquement côté serveur (fonction `api/`), jamais exposée au bundle client.
+- En production sur Vercel, ajouter `MONGO_URI` dans Project Settings → Environment Variables.
+- Pour peupler/réinitialiser la collection à partir des données de départ :
+
+```bash
+node --env-file=.env scripts/seed.mjs
+```
+
+- En local, `vite dev` seul ne sert pas les fonctions `api/`. Utiliser `vercel dev` (CLI Vercel) pour tester `/api/projects` en conditions réelles, ou se fier au déploiement (preview/production) sur Vercel.
+
+## Espace admin (`/admin`)
+
+Un espace `/admin` protégé par mot de passe est en cours de mise en place (phase 1 : authentification + routing ; la gestion du contenu viendra ensuite).
+
+Variables à ajouter dans `.env` (jamais préfixées `VITE_`, lues uniquement côté serveur) :
+
+```bash
+JWT_SECRET=une-chaine-aleatoire-longue
+ADMIN_PASSWORD_HASH=$2b$12$...
+```
+
+- Générer `JWT_SECRET` (une seule fois, à garder identique entre local et prod) :
+
+```bash
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+```
+
+- Générer `ADMIN_PASSWORD_HASH` à partir du mot de passe de ton choix (jamais stocké en clair) :
+
+```bash
+node scripts/hash-password.mjs "TonMotDePasse"
+```
+
+- Ajouter les deux variables dans Vercel → Project Settings → Environment Variables (Production **et** Preview si besoin) avant de déployer.
+- Routes : `/admin/login` (formulaire), `/admin` (dashboard, redirige vers `/admin/login` si non connecté). API : `POST /api/admin/login`, `POST /api/admin/logout`, `GET /api/admin/me`.
+
 ## Structure (aperçu)
 
 - `src/App.jsx` : point d’entrée de l’app
 - `src/layout/` : layout (ex. `Navbar`, `Footer`)
 - `src/section/` : sections (Hero, About, Contact, etc.)
 - `src/components/` : composants réutilisables
+- `api/` : fonctions serverless Vercel (ex. `api/projects.js`)
+- `scripts/` : scripts ponctuels (ex. `scripts/seed.mjs`)
 
 ## Plan d’architecture
 
@@ -83,6 +132,7 @@ Notes :
 - **Composition** : `App` assemble le layout (`src/layout/`) et les sections (`src/section/`)
 - **UI réutilisable** : composants transverses dans `src/components/`
 - **Contact** : `src/section/Contact.jsx` envoie les emails via EmailJS et lit les variables `VITE_EMAILJS_*`
+- **Projets** : `src/section/Projects.jsx` récupère les données via `fetch("/api/projects")`, servi par la fonction serverless `api/projects.js` qui lit MongoDB (`MONGO_URI`)
 
 ### Arborescence (simplifiée)
 
