@@ -1,31 +1,43 @@
-import React from 'react'
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { Button } from "../components/Button";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
+import { useSectionContent } from "../hooks/useSectionContent";
 
-const contactInfo = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "slimdev20@gmail.com",
-    href: "mailto:slimdev20@gmail.com",
-  },
-  {
-    icon: Phone,
-    label: "Téléphone",
-    value: "0607651050",
-    href: "tel:+33607651050",
-  },
-  {
-    icon: MapPin,
-    label: "Adresse",
-    value: "30 rue Hippolyte Mulin 92120 Montrouge",
-    href: "#",
-  },
-];
+const DEFAULT_CONTENT = {
+  badge: "Me contacter",
+  headingLine1: "Bâtissons ensemble",
+  headingHighlight: "de grands projets.",
+  paragraph:
+    "Un projet en vue ? Je suis à votre écoute. Contactez-moi pour échanger sur vos besoins et définir comment je peux vous accompagner.",
+  email: "slimdev20@gmail.com",
+  phone: "0607651050",
+  address: "30 rue Hippolyte Mulin 92120 Montrouge",
+};
 
 export const Contact = () => {
+  const content = useSectionContent("contact", DEFAULT_CONTENT);
+
+  const contactInfo = [
+    {
+      icon: Mail,
+      label: "Email",
+      value: content.email,
+      href: `mailto:${content.email}`,
+    },
+    {
+      icon: Phone,
+      label: "Téléphone",
+      value: content.phone,
+      href: `tel:+33${content.phone.replace(/^0/, "")}`,
+    },
+    {
+      icon: MapPin,
+      label: "Adresse",
+      value: content.address,
+      href: "#",
+    },
+  ];
   // Création de state pour la gestion du fomulaire de contact//
   const [formData, setFormData] = useState({
     name: "",
@@ -118,18 +130,16 @@ export const Contact = () => {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-secondary-foreground text-sm font-medium tracking-wider uppercase animate-fade-in">
-            Me contacter
+            {content.badge}
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 animate-fade-in animation-delay-100 text-secondary-foreground">
-            Bâtissons ensemble{" "}
+            {content.headingLine1}{" "}
             <span className="font-serif italic font-normal text-white">
-              de grands projets.
+              {content.headingHighlight}
             </span>
           </h2>
           <p className="text-muted-foreground animate-fade-in animation-delay-200">
-            Un projet en vue ? Je suis à votre écoute. Contactez-moi pour
-            échanger sur vos besoins et définir comment je peux vous
-            accompagner.
+            {content.paragraph}
           </p>
         </div>
         <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">

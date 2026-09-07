@@ -1,24 +1,21 @@
-import React from 'react'
+import { useSectionContent } from "../hooks/useSectionContent";
 
-const expriences = [
-  {
-    period: "2024 - 2025",
-    school: "Studi",
-    diplome: "RNCP Bac+2 DWWM",
-  },
-  {
-    period: "2022 - 2024",
-    school: "CRR Amiens",
-    diplome: "DEM Musique actuel",
-  },
-  {
-    period: "2002 - 2004",
-    school: "Institut Pascal",
-    diplome: "BTP PAO",
-  },
-];
+const DEFAULT_CONTENT = {
+  badge: "Diplômes",
+  headingLine1: "Mon parcours",
+  headingHighlight: "Scolaire",
+  paragraph:
+    "Diplômé de chez Studi, j'ai consolidé mon expertise technique à travers une formation rigoureuse axée sur les réalités du marché. Ce cursus m'a permis de maîtriser l'intégralité du cycle de développement, de la conception d'architectures Full-Stack à l'optimisation de l'expérience utilisateur.",
+  experiences: [
+    { period: "2024 - 2025", school: "Studi", diplome: "RNCP Bac+2 DWWM" },
+    { period: "2022 - 2024", school: "CRR Amiens", diplome: "DEM Musique actuel" },
+    { period: "2002 - 2004", school: "Institut Pascal", diplome: "BTP PAO" },
+  ],
+};
 
 export const Diplome = () => {
+  const content = useSectionContent("diplome", DEFAULT_CONTENT);
+
   return (
     <section id="diplome" className="py-32 relative overflow-hidden">
       <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2" />
@@ -26,20 +23,16 @@ export const Diplome = () => {
         {/* Section Header  */}
         <div className="max-w-3xl mb-16">
           <span className="text-secondary-foreground text-sm font-medium tracking-wider uppercase animate-fade-in">
-            Dilpômes
+            {content.badge}
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4 mb-6 animate-fade-in animation-delay-100 text-secondary-foreground">
-            Mon parcours{" "}
+            {content.headingLine1}{" "}
             <span className="font-serif italic font-normal text-white">
-              Scolaire
+              {content.headingHighlight}
             </span>
           </h2>
           <p className="text-muted-foreground animate-fade-in animation-delay-200">
-            Diplômé de chez Studi, j'ai consolidé mon expertise technique à
-            travers une formation rigoureuse axée sur les réalités du marché. Ce
-            cursus m'a permis de maîtriser l'intégralité du cycle de
-            développement, de la conception d'architectures Full-Stack à
-            l'optimisation de l'expérience utilisateur.
+            {content.paragraph}
           </p>
         </div>
         {/* Timeline */}
@@ -48,7 +41,7 @@ export const Diplome = () => {
 
           {/* Diplome items */}
           <div className="space-y-12">
-            {expriences.map((exp, idx) => (
+            {content.experiences.map((exp, idx) => (
               <div
                 key={idx}
                 className="relative grid grid-cols-[24px_1fr] md:grid-cols-2 gap-6 md:gap-12 items-start"
@@ -83,4 +76,4 @@ export const Diplome = () => {
       </div>
     </section>
   );
-}
+};

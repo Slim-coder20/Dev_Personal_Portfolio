@@ -91,7 +91,7 @@ node --env-file=.env scripts/seed.mjs
 
 ## Espace admin (`/admin`)
 
-Un espace `/admin` protégé par mot de passe permet de gérer le contenu du site (phase 2 : CRUD des projets + upload d'images ; les autres sections du site viendront ensuite).
+Un espace `/admin` protégé par mot de passe permet de gérer le contenu du site : les projets (CRUD + upload d'images) et les textes des sections Hero / À propos / Diplômes / Contact.
 
 Variables à ajouter dans `.env` (jamais préfixées `VITE_`, lues uniquement côté serveur) :
 
@@ -130,6 +130,19 @@ Depuis `/admin`, on peut créer, éditer et supprimer des projets (formulaire av
 Sans ce store Blob créé, l'upload d'image échouera (`BLOB_READ_WRITE_TOKEN` manquant) — le reste de l'admin (texte, tags, liens) fonctionne malgré tout, il suffit dans ce cas de coller une URL d'image existante dans le champ prévu à cet effet plutôt que d'utiliser l'upload.
 
 Limite à connaître : le corps d'une fonction Vercel est limité à ~4.5 Mo, donc une image source de quelques Mo maximum une fois encodée en base64.
+
+### Contenu des sections (Hero, À propos, Diplômes, Contact)
+
+Depuis `/admin` → onglet **Contenu du site**, on peut éditer les textes de chaque section (titres, paragraphes, compétences, points forts, parcours scolaire, coordonnées de contact) sans toucher au code.
+
+- Stocké dans la collection MongoDB `content`, un document par section (`_id: "hero" | "about" | "diplome" | "contact"`).
+- `GET /api/content/:section` reste public (site) ; `PUT /api/content/:section` nécessite la session admin.
+- Chaque section du site public a des valeurs par défaut codées en dur (celles d'origine) qui s'affichent instantanément, puis sont remplacées silencieusement par le contenu de la base une fois chargé — pas de flash de contenu vide ni de spinner sur ces sections.
+- Pour peupler la base la première fois (ou la réinitialiser aux valeurs d'origine) :
+
+```bash
+node --env-file=.env scripts/seed-content.mjs
+```
 
 ## Structure (aperçu)
 
