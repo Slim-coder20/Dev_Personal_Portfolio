@@ -1,94 +1,34 @@
-import React from 'react'
 import { ArrowUpRight, Github } from "lucide-react";
-const projects = [
-  {
-    title: "Amazone-clone",
-    description:
-      "Application web e-commerce inspirée d’Amazon : authentification Firebase, panier, checkout et paiement en ligne via Stripe.",
-    image: "/projects/project1.png",
-    tags: ["React", "React Router 7", "Node.js", "Firebase", "Stripe"],
-    link: "https://e-clone-f1b94.web.app/",
-    github: "https://github.com/Slim-coder20/amazone-clone.git",
-  },
-  {
-    title: "Vite&Gouramnd",
-    description:
-      "Application web full-stack permettant aux clients de commander des repas en ligne, avec des espaces dédiés pour les clients, employés et administrateurs.",
-    image: "/projects/project2.png",
-    tags: ["React", "CSS", "Node.js", "Supabase", "MongoDB", "Docker"],
-    link: "https://vite-gourmand.vercel.app/",
-    github: "https://github.com/Slim-coder20/vite-gourmand.git",
-  },
-  {
-    title: "FoodStore",
-    description:
-      "Application e-commerce alimentaire full-stack avec une interface client (acheteurs) et une interface vendeur (gestion des produits et commandes).",
-    image: "/projects/project3.png",
-    tags: [
-      "React",
-      "React-hook-form",
-      "Tailwindcss",
-      "Node.js",
-      "MongoDB",
-      "Stripe",
-      "JWT",
-      "Multer",
-      "Cloudinary",
-    ],
-    link: "https://foodstorefront.vercel.app",
-    github: "https://github.com/Slim-coder20/greenCart-.git",
-  },
-  {
-    title: "Website Artist - Slim Abida",
-    description:
-      "Site web officiel de Slim Abida avec système de e-commerce intégré pour la vente d'albums, système de traduction FR/EN, et gestion dynamique du contenu.",
-    image: "/projects/project4.png",
-    tags: [
-      "Next.js15",
-      "TypeScript",
-      "CSS Modules",
-      "React Context API",
-      "Prisma",
-      "Postgres",
-      "Supabase",
-    ],
-    link: "https://www.slimabida.fr/",
-    github: "https://github.com/Slim-coder20/my-web-site.git",
-  },
-  {
-    title: "Tunzik Production - Association de spectacle vivant",
-    description:
-      "Site web de Tunzik Production, association d'aide au spectacle vivant basée à Paris depuis 2017. La plateforme présente les artistes du label, leur discographie, et permet aux visiteurs de devenir adhérents ou de contacter l'association",
-    image: "/projects/tunzikProd.png",
-    tags: [
-      "React 19",
-      "Tailwindcss",
-      "React Context API",
-      "MongoDB",
-      "Vercel",
-      "Render",
-    ],
-    link: "https://tunzik-prod.vercel.app/",
-    github: "https://github.com/Slim-coder20/tunzikProd.git",
-  },
-  {
-    title: "Chatbot AI - Une mini application de chat IA",
-    description:
-      "Une application de chatbot interactif utilisant l'API OpenAI GPT-4o pour créer une expérience de conversation fluide et intuitive.",
-    image: "/projects/chatbot.png",
-    tags: [
-      "HTML",
-      "CSS",
-      "OPENAI API",
-      "JavaScript",
-      "Vercel"
-      
-    ],
-    link: "https://chatbot-ia-topaz.vercel.app/",
-    github: "https://github.com/Slim-coder20/chatbot_IA-.git",
-  },
-];
+import { useEffect, useState } from "react";
+
 export const Projects = () => {
+  const [projects, setProjects] = useState([]);
+  const [status, setStatus] = useState("loading"); // loading | error | done
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/projects")
+      .then((res) => {
+        if (!res.ok) throw new Error("Réponse API invalide");
+        return res.json();
+      })
+      .then((data) => {
+        if (cancelled) return;
+        setProjects(data);
+        setStatus("done");
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("Erreur de chargement des projets:", err);
+        setStatus("error");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section id="projects" className="py-32 relative overflow-hidden">
       {/* bg glows  */}
@@ -117,10 +57,21 @@ export const Projects = () => {
           </p>
         </div>
         {/* Projects Section en Grid*/}
+        {status === "loading" && (
+          <p className="text-center text-muted-foreground">
+            Chargement des projets...
+          </p>
+        )}
+        {status === "error" && (
+          <p className="text-center text-red-500">
+            Impossible de charger les projets pour le moment.
+          </p>
+        )}
+        {status === "done" && (
         <div className="grid lg:grid-cols-2 gap-8">
           {projects.map((project, idx) => (
             <div
-              key={idx}
+              key={project.title}
               className=" group glass rounded-2xl overflow-hidden animate-fade-in md:row-span-1"
               style={{ animationDelay: `${(idx + 1) * 100}ms` }}
             >
@@ -176,7 +127,8 @@ export const Projects = () => {
             </div>
           ))}
         </div>
+        )}
       </div>
     </section>
   );
-}
+};
