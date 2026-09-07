@@ -91,7 +91,7 @@ node --env-file=.env scripts/seed.mjs
 
 ## Espace admin (`/admin`)
 
-Un espace `/admin` protégé par mot de passe est en cours de mise en place (phase 1 : authentification + routing ; la gestion du contenu viendra ensuite).
+Un espace `/admin` protégé par mot de passe permet de gérer le contenu du site (phase 2 : CRUD des projets + upload d'images ; les autres sections du site viendront ensuite).
 
 Variables à ajouter dans `.env` (jamais préfixées `VITE_`, lues uniquement côté serveur) :
 
@@ -114,6 +114,22 @@ node scripts/hash-password.mjs "TonMotDePasse"
 
 - Ajouter les deux variables dans Vercel → Project Settings → Environment Variables (Production **et** Preview si besoin) avant de déployer.
 - Routes : `/admin/login` (formulaire), `/admin` (dashboard, redirige vers `/admin/login` si non connecté). API : `POST /api/admin/login`, `POST /api/admin/logout`, `GET /api/admin/me`.
+
+### Gestion des projets (CRUD)
+
+Depuis `/admin`, on peut créer, éditer et supprimer des projets (formulaire avec upload d'image directement dans le dashboard, plus besoin de passer par MongoDB Atlas ou de committer une image dans `public/projects/`).
+
+- `GET /api/projects` reste public (site) ; `POST` / `PUT` / `DELETE` nécessitent la session admin.
+- `POST /api/admin/upload` reçoit une image (encodée en base64 depuis le navigateur) et la stocke sur **Vercel Blob**, protégé par la session admin.
+
+**Prérequis Vercel Blob** (à faire une seule fois, dans le dashboard Vercel — pas via ce dépôt) :
+1. Vercel → ton projet → onglet **Storage** → **Create Database** → **Blob**
+2. Une fois créé, lie le store au projet — Vercel injecte automatiquement la variable `BLOB_READ_WRITE_TOKEN` dans les Environment Variables
+3. Redéployer pour que la variable soit prise en compte
+
+Sans ce store Blob créé, l'upload d'image échouera (`BLOB_READ_WRITE_TOKEN` manquant) — le reste de l'admin (texte, tags, liens) fonctionne malgré tout, il suffit dans ce cas de coller une URL d'image existante dans le champ prévu à cet effet plutôt que d'utiliser l'upload.
+
+Limite à connaître : le corps d'une fonction Vercel est limité à ~4.5 Mo, donc une image source de quelques Mo maximum une fois encodée en base64.
 
 ## Structure (aperçu)
 
