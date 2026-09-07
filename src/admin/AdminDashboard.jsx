@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Button } from "../components/Button";
+import { ProjectsManager } from "./ProjectsManager";
 
 export const AdminDashboard = () => {
   const [status, setStatus] = useState("checking"); // checking | authenticated | unauthenticated
@@ -37,10 +38,7 @@ export const AdminDashboard = () => {
           Déconnexion
         </Button>
       </div>
-      <p className="text-muted-foreground">
-        Connecté. La gestion des projets et du contenu du site arrivera dans
-        les phases suivantes.
-      </p>
+      <ProjectsManager />
     </div>
   );
 };

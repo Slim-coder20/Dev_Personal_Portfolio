@@ -25,3 +25,6 @@ dist-ssr
 
 #.Env
 .env
+
+# Dossier technique de l'outillage (ex. worktrees) — jamais du code du projet
+.claude/
