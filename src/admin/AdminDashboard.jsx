@@ -2,9 +2,16 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Button } from "../components/Button";
 import { ProjectsManager } from "./ProjectsManager";
+import { ContentManager } from "./ContentManager";
+
+const TABS = [
+  { key: "projects", label: "Projets" },
+  { key: "content", label: "Contenu du site" },
+];
 
 export const AdminDashboard = () => {
   const [status, setStatus] = useState("checking"); // checking | authenticated | unauthenticated
+  const [tab, setTab] = useState("projects");
 
   useEffect(() => {
     fetch("/api/admin/me")
@@ -38,7 +45,24 @@ export const AdminDashboard = () => {
           Déconnexion
         </Button>
       </div>
-      <ProjectsManager />
+      <div className="flex gap-2 mb-8 border-b border-border">
+        {TABS.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-all ${
+              tab === t.key
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === "projects" && <ProjectsManager />}
+      {tab === "content" && <ContentManager />}
     </div>
   );
 };

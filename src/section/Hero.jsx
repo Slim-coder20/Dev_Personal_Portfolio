@@ -8,27 +8,35 @@ import {
   Download,
 } from "lucide-react";
 import { AnimatedBorderButton } from "../components/AnimatedBorderButton";
+import { useSectionContent } from "../hooks/useSectionContent";
 
-const skills = [
-  "React",
-
-  "TypeScript",
-  "Node.js",
-
-  "PostgreSQL",
-  "MongoDB",
-
-  "Docker",
-
-  "Vercel",
-  "Tailwind CSS",
-
-  "Figma",
-  "Git",
-  "GitHub Actions",
-];
+const DEFAULT_CONTENT = {
+  badge: "Software Engineer • React Specialist",
+  headlineLine1: "Façonner vos projets",
+  headlineHighlight: "numériques",
+  headlineLine2: "avec une précision",
+  headlineLine3: "absolue.",
+  paragraph:
+    "Slim Abida | Développeur Full-Stack MERN Passionné par la création d'expériences numériques fluides, je transforme des idées complexes en applications performantes avec React, TypeScript et Node.js. Mon exigence : l'alliance parfaite entre design et précision technique.",
+  availabilityBadge: "Disponible immédiatement",
+  skills: [
+    "React",
+    "TypeScript",
+    "Node.js",
+    "PostgreSQL",
+    "MongoDB",
+    "Docker",
+    "Vercel",
+    "Tailwind CSS",
+    "Figma",
+    "Git",
+    "GitHub Actions",
+  ],
+};
 
 export const Hero = () => {
+  const content = useSectionContent("hero", DEFAULT_CONTENT);
+
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (!section) return;
@@ -74,28 +82,24 @@ export const Hero = () => {
             <div className="animate-fade-in">
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-primary">
                 <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                Software Engineer • React Specialist
+                {content.badge}
               </span>
             </div>
 
             {/* Headline */}
             <div className="space-y-4">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight animate-fade-in animation-delay-100">
-                Façonner vos projets{" "}
-                <span className="text-primary glow-text">numériques</span>
+                {content.headlineLine1}{" "}
+                <span className="text-primary glow-text">{content.headlineHighlight}</span>
                 <br />
-                avec une précision
+                {content.headlineLine2}
                 <br />
                 <span className="font-serif italic font-normal text-white">
-                  absolue.
+                  {content.headlineLine3}
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-lg animate-fade-in animation-delay-200">
-                Slim Abida | Développeur Full-Stack MERN Passionné par la
-                création d'expériences numériques fluides, je transforme des
-                idées complexes en applications performantes avec React,
-                TypeScript et Node.js. Mon exigence : l’alliance parfaite entre
-                design et précision technique.
+                {content.paragraph}
               </p>
             </div>
 
@@ -157,7 +161,7 @@ export const Hero = () => {
                   <div className="flex items-center gap-3">
                     <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
                     <span className="text-sm font-medium">
-                      Disponible immédiatemen
+                      {content.availabilityBadge}
                     </span>
                   </div>
                 </div>
@@ -181,7 +185,7 @@ export const Hero = () => {
              bg-linear-to-l from-background to-transparent z-10"
             />
             <div className="flex animate-marquee">
-              {[...skills, ...skills].map((skill, idx) => (
+              {[...content.skills, ...content.skills].map((skill, idx) => (
                 <div key={idx} className="shrink-0 px-8 py-4">
                   <span className="text-xl font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">
                     {skill}
