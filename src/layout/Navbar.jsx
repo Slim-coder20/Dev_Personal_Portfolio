@@ -1,4 +1,4 @@
-import React from 'react'
+ import React from 'react'
 import { Button } from "../components/Button";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";

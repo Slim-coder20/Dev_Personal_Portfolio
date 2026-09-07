@@ -26,7 +26,7 @@ const contactInfo = [
 ];
 
 export const Contact = () => {
-  // Création de state pour le formData //
+  // Création de state pour la gestion du fomulaire de contact//
   const [formData, setFormData] = useState({
     name: "",
     email: "",
